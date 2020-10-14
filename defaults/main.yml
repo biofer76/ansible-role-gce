@@ -1,0 +1,41 @@
+---
+gcp_debug: yes
+
+# Service Account file
+gcp_service_account_file: ../../particles-testing.json
+
+# GCE Instance name
+gcp_project_id: particles-testing
+gce_instance_name: ansible-gce-instance
+gce_instance_state: present
+gce_instance_zone: us-central1-a
+
+# Boot Disk default properties
+# Disk types:
+#  - pd-standard
+#  - pd-ssd
+#  - pd-balanced
+gce_instance:
+  disk:
+    d0: 
+      size: 50
+      type: pd-ssd
+      # Get all images uri: gcloud compute images list --uri
+      # image only on disk0
+      image: projects/debian-cloud/global/images/debian-10-buster-v20200910
+      state: present
+    d1:
+      size: 50
+      type: pd-standard
+      state: present
+
+# Google API Scopes
+gcp_api_scopes:
+  COMPUTE: https://www.googleapis.com/auth/compute
+  MONITORING: https://www.googleapis.com/auth/monitoring
+  LOGGING_WRITE: https://www.googleapis.com/auth/logging.write
+  MONITORING_WRITE: https://www.googleapis.com/auth/monitoring.write
+  SERVICECONTROL: https://www.googleapis.com/auth/servicecontrol
+  SERVICE_MANAGEMENT_READONLY: https://www.googleapis.com/auth/service.management.readonly
+  TRACE_APPEND: https://www.googleapis.com/auth/trace.append
+  STORAGE_READ_WRITE: https://www.googleapis.com/auth/devstorage.read_write

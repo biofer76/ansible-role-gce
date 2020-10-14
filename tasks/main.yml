@@ -1,0 +1,7 @@
+---
+- name: Debug
+  debug:
+    var: gce_instance.disk.d0.size
+
+- include_tasks: disks.yml
+  when: gce_instance.disk.d0.size|int > 0
