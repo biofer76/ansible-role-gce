@@ -2,7 +2,7 @@
 gcp_debug: yes
 
 # Service Account file
-gcp_service_account_file: ../../particles-testing.json
+gcp_service_account_file: ../particles-testing.json
 
 # GCE Instance name
 gcp_project_id: particles-testing
