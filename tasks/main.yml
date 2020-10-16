@@ -1,7 +1,13 @@
 ---
 - name: Debug
   debug:
-    var: gce_instance.disk.d0.size
+    var: gce_instance
+  when: gcp_debug
 
-- include_tasks: disks.yml
-  when: gce_instance.disk.d0.size|int > 0
+- name: include disk tasks
+  include: disk.yml
+  tags: disk
+
+- name: include network tasks
+  include: network.yml
+  tags: network

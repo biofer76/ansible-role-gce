@@ -1,0 +1,50 @@
+---
+# GCE DISK
+- name: GCP Debug
+  debug:
+    var: disk
+  when: gcp_debug 
+
+# Manage Boot Disk (d0)
+- name: manage gce boot disk
+  google.cloud.gcp_compute_disk:
+    name:         "{{ disk.name }}-boot"
+    size_gb:      "{{ disk.device.d0.size }}"
+    type:         "{{ disk.device.d0.type }}"
+    source_image: "{{ disk.device.d0.image }}"
+    zone:         "{{ disk.zone }}"
+    project:      "{{ gcp_project.id }}"
+    auth_kind:    "serviceaccount"
+    service_account_file: "{{ gcp_project.service_account_file }}"
+    scopes:
+      - "{{ gcp_api_scopes.COMPUTE }}"
+    state: "{{ disk.device.d0.state }}"
+  register: gce_instance_disk_d0
+
+- name: GCP Debug
+  debug:
+    var: gce_instance_disk_d0
+  when: gcp_debug 
+
+# Manage additional disks (d1,d2,d3,etc.)
+- name: manage gce additional disks
+  google.cloud.gcp_compute_disk:
+    name:       "{{ disk.name }}-{{ item }}"
+    size_gb:    "{{ disk.device[item].size }}"
+    type:       "{{ disk.device[item].type }}"
+    zone:       "{{ disk.zone }}"
+    project:    "{{ gcp_project.id }}"
+    auth_kind:  "serviceaccount"
+    service_account_file: "{{ gcp_project.service_account_file }}"
+    scopes:
+      - "{{ gcp_api_scopes.COMPUTE }}"
+    state: "{{ disk.device[item].state }}"
+  register: gce_instance_disk
+  with_items: "{{ disk.device }}"
+  when: gce_instance.disk.device.d1.size|int > 0 and item != "d0"
+
+# - name: GCP Debug
+#   debug:
+#     var: gce_instance_disk.results
+#   when: gcp_debug 
+  
