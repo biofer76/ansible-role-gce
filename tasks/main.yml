@@ -4,6 +4,10 @@
     var: gce_instance
   when: gcp_debug
 
+- name: debug task
+  include: debug.yml
+  tags: debug
+
 - name: include disk tasks
   include: disk.yml
   tags: disk
@@ -11,3 +15,7 @@
 - name: include network tasks
   include: network.yml
   tags: network
+
+- name: include ip address tasks
+  include: ip_address.yml
+  tags: ip_address

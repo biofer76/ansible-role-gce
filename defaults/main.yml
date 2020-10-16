@@ -16,13 +16,19 @@ gcp_project:
 #  - pd-ssd
 #  - pd-balanced
 ###
+
+gce_instance_name: ansible-gce-instance
+gce_instance_region: us-central1
+gce_instance_zone: us-central1-a
+
 gce_instance:
-  name: ansible-gce-instance
+  name: "{{ gce_instance_name }}"
   state: present
-  zone: us-central1-a
+  region: "{{ gce_instance_region }}"
+  zone: "{{ gce_instance_zone }}"
   disk:
-    zone: us-central1-a
-    name: ansible-gce-instance
+    name: "{{ gce_instance_name }}"
+    zone: "{{ gce_instance_zone }}"
     device:
       d0:     
         size: 50
@@ -31,18 +37,23 @@ gce_instance:
         # image is supported on boot disk only
         image: projects/debian-cloud/global/images/debian-10-buster-v20200910
         state: present
-      d1:
-        size: 50
-        type: pd-standard
-        state: present
+      # d1:
+      #   size: 50
+      #   type: pd-standard
+      #   state: present
   network:
     n0:
       name: default
       create_subnet: no
       state: present
+  ip:
+    name: "{{ gce_instance_name }}"
+    state: present
+    region: "{{ gce_instance_region }}"
 
 network: "{{ gce_instance.network }}"
 disk: "{{ gce_instance.disk }}"
+ip: "{{ gce_instance.ip }}"
 
 ###
 # Google API Scopes

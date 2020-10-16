@@ -1,11 +1,11 @@
 --- 
 # GCE NETWORK
-- name: GCP Debug
+- name: debug network config
   debug:
     var: network
   when: gcp_debug 
 
-- name: manage gce network
+- name: manage gce network (present)
   gcp_compute_network:
     name: "{{ network.n0.name }}"
     auto_create_subnetworks: "{{ network.n0.create_subnet }}"
@@ -16,3 +16,16 @@
       -  "{{ gcp_api_scopes.COMPUTE }}"
     state: "{{ network.n0.state }}"
   register: gce_network
+  when: network.n0.state == "present"
+
+- name: manage gce network (absent)
+  gcp_compute_network:
+    name: "{{ network.n0.name }}"
+    project: "{{ gcp_project.id }}"
+    auth_kind: "serviceaccount"
+    service_account_file: "{{ gcp_project.service_account_file }}"
+    scopes:
+      -  "{{ gcp_api_scopes.COMPUTE }}"
+    state: "{{ network.n0.state }}"
+  register: gce_network
+  when: network.n0.state == "absent"
