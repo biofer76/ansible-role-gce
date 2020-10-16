@@ -1,1 +1,43 @@
 ---
+# GCE INSTANCE
+- name: debug instance config
+  debug:
+    var: gce_instance
+  when: gcp_debug 
+
+- name: manage gce instance
+  gcp_compute_instance:   
+    name:         "{{ gce_instance.name }}"
+    machine_type: "{{ gce_instance.type }}"
+    zone:         "{{ gce_instance.zone }}"
+    state:        "{{ gce_instance.state }}"
+    disks:
+      - source: "{{ gce_disk_d0 }}"
+        boot: true
+        auto_delete: true
+    network_interfaces:
+      - network: "{{ gce_network }}"
+        access_configs:
+           - name: 'External NAT'
+             type: 'ONE_TO_ONE_NAT'
+             nat_ip: "{{ gce_ip }}"
+    scheduling:
+      on_host_maintenance: "MIGRATE"
+      automatic_restart: yes
+    service_accounts:
+      - email: "{{ gce_instance.service_account }}"
+        scopes: "{{ gce_instance.api_auth }}"
+    
+    deletion_protection: "{{ gce_instance.delete_protection }}"
+    # labels: "{{ instance_labels }}"
+    project: "{{ gcp_project.id }}"
+    auth_kind: "serviceaccount"
+    service_account_file: "{{ gcp_project.service_account_file }}"
+    scopes:
+      - "{{ gcp_api_scopes.COMPUTE }}"
+  register: gce_instance_result
+
+- name: debug instance result
+  debug:
+    var: gce_instance_result
+  when: gcp_debug 

@@ -26,6 +26,8 @@ gce_instance:
   state: present
   region: "{{ gce_instance_region }}"
   zone: "{{ gce_instance_zone }}"
+  type: n1-standard-1
+  delete_protection: no
   disk:
     name: "{{ gce_instance_name }}"
     zone: "{{ gce_instance_zone }}"
@@ -50,6 +52,12 @@ gce_instance:
     name: "{{ gce_instance_name }}"
     state: present
     region: "{{ gce_instance_region }}"
+  service_account: "347021062934-compute@developer.gserviceaccount.com"
+  api_auth:
+    - "{{ gcp_api_scopes.STORAGE_READ_WRITE }}"
+  labels:
+    team: devops
+    automation: ansible
 
 network: "{{ gce_instance.network }}"
 disk: "{{ gce_instance.disk }}"

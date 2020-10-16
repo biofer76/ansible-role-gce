@@ -19,3 +19,7 @@
 - name: include ip address tasks
   include: ip_address.yml
   tags: ip_address
+
+- name: include instance tasks
+  include: instance.yml
+  tags: instance
