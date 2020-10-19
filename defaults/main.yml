@@ -1,37 +1,33 @@
 ---
+### Display GCP debug info
 gcp_debug: yes
 
-###
-# Project config
-###
+### Project config
 gcp_project: 
   id: particles-testing
   service_account_file: ../particles-testing.json
 
-###
-# Disks
-###
-# available types:
-#  - pd-standard
-#  - pd-ssd
-#  - pd-balanced
-###
 
+### Instance main properties
 gce_instance_name: ansible-gce-instance
 gce_instance_region: us-central1
 gce_instance_zone: us-central1-a
 
+### Instance resources
 gce_instance:
   name: "{{ gce_instance_name }}"
   state: present
   region: "{{ gce_instance_region }}"
   zone: "{{ gce_instance_zone }}"
+  ### Instance Type
   type: n1-standard-1
   delete_protection: no
+  ### Disks
   disk:
     name: "{{ gce_instance_name }}"
     zone: "{{ gce_instance_zone }}"
     device:
+      ### Boot disk
       d0:     
         size: 50
         type: pd-standard
@@ -39,33 +35,38 @@ gce_instance:
         # image is supported on boot disk only
         image: projects/debian-cloud/global/images/debian-10-buster-v20200910
         state: present
+      ### Additional disks
       # d1:
       #   size: 50
       #   type: pd-standard
       #   state: present
+  ### VPC Network
   network:
     n0:
       name: default
       create_subnet: no
       state: present
+  ### Ext-IP Address
   ip:
     name: "{{ gce_instance_name }}"
     state: present
     region: "{{ gce_instance_region }}"
+  ### Machine Service Account
   service_account: "347021062934-compute@developer.gserviceaccount.com"
+  ### API Authorization
   api_auth:
     - "{{ gcp_api_scopes.STORAGE_READ_WRITE }}"
+  ### Labels (+2.9)
   labels:
     team: devops
     automation: ansible
 
+### Configure resources (do not edit)
 network: "{{ gce_instance.network }}"
 disk: "{{ gce_instance.disk }}"
 ip: "{{ gce_instance.ip }}"
 
-###
-# Google API Scopes
-###
+### Google API Scopes
 gcp_api_scopes:
   COMPUTE: https://www.googleapis.com/auth/compute
   MONITORING: https://www.googleapis.com/auth/monitoring

@@ -4,10 +4,6 @@
     var: gce_instance
   when: gcp_debug
 
-- name: debug task
-  include: debug.yml
-  tags: debug
-
 - name: include disk tasks
   include: disk.yml
   tags: disk
