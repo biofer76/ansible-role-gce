@@ -7,7 +7,7 @@
 
 # Manage Boot Disk (d0)
 - name: manage gce boot disk
-  google.cloud.gcp_compute_disk:
+  gcp_compute_disk:
     name:         "{{ disk.name }}-boot"
     size_gb:      "{{ disk.device.d0.size }}"
     type:         "{{ disk.device.d0.type }}"
@@ -28,7 +28,7 @@
 
 # Manage additional disks (d1,d2,d3,etc.)
 - name: manage gce additional disks
-  google.cloud.gcp_compute_disk:
+  gcp_compute_disk:
     name:       "{{ disk.name }}-{{ item }}"
     size_gb:    "{{ disk.device[item].size }}"
     type:       "{{ disk.device[item].type }}"
