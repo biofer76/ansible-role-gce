@@ -4,8 +4,8 @@ gcp_debug: yes
 
 ### Project config
 gcp_project: 
-  id: particles-testing
-  service_account_file: ../particles-testing.json
+  id: "{{ lookup('env','GCP_PROJECT_ID') }}"
+  service_account_file: "{{ lookup('env','GCP_SERVICE_ACCOUNT_FILE') }}"
 
 
 ### Instance main properties
