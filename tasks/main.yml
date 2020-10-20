@@ -12,15 +12,19 @@
 - name: include disk tasks
   include: disk.yml
   tags: disk
+  when: disk is defined
 
 - name: include network tasks
   include: network.yml
   tags: network
+  when: network is defined
 
 - name: include ip address tasks
   include: ip_address.yml
   tags: ip_address
+  when: ip is defined
 
 - name: include instance tasks
   include: instance.yml
   tags: instance
+  when: gce_instance is defined
