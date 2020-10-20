@@ -2,22 +2,22 @@
 # IP ADDRESS
 - name: debug ip config
   debug:
-    var: ip
+    var: gce_ip
   when: gcp_debug 
 
 - name: manage gce ip address
   gcp_compute_address:
-    name:       "{{ ip.name }}-ip"
-    region:     "{{ ip.region }}"
+    name:       "{{ gce_ip.name }}-ip"
+    region:     "{{ gce_ip.region }}"
     project:    "{{ gcp_project_id }}"
     auth_kind:  "serviceaccount"
     service_account_file: "{{ gcp_service_account_file }}"
     scopes:
        - "{{ gcp_api_scopes.COMPUTE }}"
-    state: present
-  register: gce_ip
+    state: "{{ gce_ip.state }}"
+  register: gce_ip_result
 
 - name: debug ip result
   debug:
-    var: gce_ip
+    var: gce_ip_result
   when: gcp_debug 

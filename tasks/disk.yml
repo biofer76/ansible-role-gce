@@ -2,50 +2,63 @@
 # GCE DISK
 - name: debug disks config
   debug:
-    var: disk
+    var: gce_disk
   when: gcp_debug 
 
-# Manage Boot Disk (d0)
-- name: manage gce boot disk
+# Add Boot Disk (d0)
+- name: add gce boot disk 
   gcp_compute_disk:
-    name:         "{{ disk.name }}-boot"
-    size_gb:      "{{ disk.device.d0.size }}"
-    type:         "{{ disk.device.d0.type }}"
-    source_image: "{{ disk.device.d0.image }}"
-    zone:         "{{ disk.zone }}"
+    name:         "{{ gce_disk.name }}-boot"
+    size_gb:      "{{ gce_disk.device.d0.size }}"
+    type:         "{{ gce_disk.device.d0.type }}"
+    source_image: "{{ gce_disk.device.d0.image }}"
+    zone:         "{{ gce_disk.zone }}"
     project:      "{{ gcp_project_id }}"
     auth_kind:    "serviceaccount"
     service_account_file: "{{ gcp_service_account_file }}"
     scopes:
       - "{{ gcp_api_scopes.COMPUTE }}"
-    state: "{{ disk.device.d0.state }}"
+    state: "{{ gce_disk.device.d0.state }}"
   register: gce_disk_d0
+  when: gce_disk.device.d0.state == "present"
+
+# Remove Boot Disk (d0)
+- name: remove gce boot disk
+  gcp_compute_disk:
+    name:         "{{ gce_disk.name }}-boot"
+    zone:         "{{ gce_disk.zone }}"
+    project:      "{{ gcp_project_id }}"
+    auth_kind:    "serviceaccount"
+    service_account_file: "{{ gcp_service_account_file }}"
+    scopes:
+      - "{{ gcp_api_scopes.COMPUTE }}"
+    state: "{{ gce_disk.device.d0.state }}"
+  when: gce_disk.device.d0.state == "absent"
 
 - name: debug boot disk result
   debug:
     var: gce_disk_d0
-  when: gcp_debug 
+  when: gcp_debug and gce_disk.device.d0.state == "present"
 
 # Manage additional disks (d1,d2,d3,etc.)
-- name: manage gce additional disks
+- name: add gce additional disks
   gcp_compute_disk:
-    name:       "{{ disk.name }}-{{ item }}"
-    size_gb:    "{{ disk.device[item].size }}"
-    type:       "{{ disk.device[item].type }}"
-    zone:       "{{ disk.zone }}"
+    name:       "{{ gce_disk.name }}-{{ item }}"
+    size_gb:    "{{ gce_disk.device[item].size }}"
+    type:       "{{ gce_disk.device[item].type }}"
+    zone:       "{{ gce_disk.zone }}"
     project:    "{{ gcp_project_id }}"
     auth_kind:  "serviceaccount"
     service_account_file: "{{ gcp_service_account_file }}"
     scopes:
       - "{{ gcp_api_scopes.COMPUTE }}"
-    state: "{{ disk.device[item].state }}"
+    state: "{{ gce_disk.device[item].state }}"
   register: gce_additional_disk
-  with_items: "{{ disk.device }}"
-  when: gce_instance.disk.device|length > 1
-  # and item != "d0"
+  with_items: "{{ gce_disk.device }}"
+  when: gce_disk.device|length > 1
 
 - name: debug additional disk results
   debug:
-    var: gce_additional_disk.results
+    var: gce_additional_gce_disk.results
   when: gcp_debug 
   

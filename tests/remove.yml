@@ -1,0 +1,38 @@
+---
+# Remove GCE Resources
+- hosts: localhost
+  gather_facts: no
+  vars:
+    instance_name: ansible-gce-instance
+    instance_region: us-central1
+    instance_zone: us-central1-a
+  roles:
+    # Remove Instance
+    - role: gce
+      vars:
+        gce_instance_name: "{{ instance_name }}"
+        gce_instance_zone: "{{ instance_zone }}"
+        gce_instance_state: absent
+        gce_disk:
+        gce_network:
+        gce_ip:
+    # Remove Boot Disk
+    - role: gce
+      vars:
+        gce_instance_name: ""
+        gce_disk:
+          name: "{{ instance_name }}"
+          zone: "{{ instance_zone }}"
+          device: { d0: { state: absent } }
+        gce_network:
+        gce_ip:
+    # Remove IP
+    - role: gce
+      vars:
+        gce_instance_name: ""
+        gce_disk:
+        gce_network:
+        gce_ip:
+          name: "{{ instance_name }}"
+          region: "{{ instance_region }}"
+          state: absent

@@ -1,30 +1,6 @@
 ---
-- name: debug gce_instance
-  debug:
-    var: gce_instance
-  when: gcp_debug
-
-- name: debug project_id
-  debug:
-    var: gcp_project_id
-  when: gcp_debug
-
-- name: include disk tasks
-  include: disk.yml
-  tags: disk
-  when: disk is defined
-
-- name: include network tasks
-  include: network.yml
-  tags: network
-  when: network is defined
-
-- name: include ip address tasks
-  include: ip_address.yml
-  tags: ip_address
-  when: ip is defined
-
-- name: include instance tasks
-  include: instance.yml
-  tags: instance
-  when: gce_instance is defined
+- { name: debug project_id, debug: { var: gcp_project_id }, when: gcp_debug }  
+- { name: include disk tasks, include: disk.yml, tags: disk, when: gce_disk.device is defined }
+- { name: include network tasks, include: network.yml, tags: network,  when: gce_network.n0 is defined }
+- { name: include ip address tasks, include: ip_address.yml, tags: ip_address, when: gce_ip.name is defined }
+- { name: include instance tasks, include: instance.yml, tags: instance, when: gce_instance_name != "" }

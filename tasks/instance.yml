@@ -1,35 +1,30 @@
 ---
 # GCE INSTANCE
-- name: debug instance config
-  debug:
-    var: gce_instance
-  when: gcp_debug 
-
 - name: manage gce instance
   gcp_compute_instance:   
-    name:         "{{ gce_instance.name }}"
-    machine_type: "{{ gce_instance.type }}"
-    zone:         "{{ gce_instance.zone }}"
-    state:        "{{ gce_instance.state }}"
+    name:         "{{ gce_instance_name }}"
+    machine_type: "{{ gce_instance_type }}"
+    zone:         "{{ gce_instance_zone }}"
+    state:        "{{ gce_instance_state }}"
     disks:
       - source: "{{ gce_disk_d0 }}"
         boot: true
         auto_delete: true
     network_interfaces:
-      - network: "{{ gce_network }}"
+      - network: "{{ gce_network_result }}"
         access_configs:
            - name: 'External NAT'
              type: 'ONE_TO_ONE_NAT'
-             nat_ip: "{{ gce_ip }}"
+             nat_ip: "{{ gce_ip_result }}"
     scheduling:
       on_host_maintenance: "MIGRATE"
       automatic_restart: yes
     service_accounts:
-      - email: "{{ gce_instance.service_account }}"
-        scopes: "{{ gce_instance.api_auth }}"
+      - email: "{{ gce_instance_service_account }}"
+        scopes: "{{ gce_instance_api_auth }}"
     
-    deletion_protection: "{{ gce_instance.delete_protection }}"
-    # labels: "{{ instance_labels }}"
+    deletion_protection: "{{ gce_instance_delete_protection }}"
+    labels: "{{ gce_instance_labels }}"
     project: "{{ gcp_project_id }}"
     auth_kind: "serviceaccount"
     service_account_file: "{{ gcp_service_account_file }}"
