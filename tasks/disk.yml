@@ -13,9 +13,9 @@
     type:         "{{ disk.device.d0.type }}"
     source_image: "{{ disk.device.d0.image }}"
     zone:         "{{ disk.zone }}"
-    project:      "{{ gcp_project.id }}"
+    project:      "{{ gcp_project_id }}"
     auth_kind:    "serviceaccount"
-    service_account_file: "{{ gcp_project.service_account_file }}"
+    service_account_file: "{{ gcp_service_account_file }}"
     scopes:
       - "{{ gcp_api_scopes.COMPUTE }}"
     state: "{{ disk.device.d0.state }}"
@@ -33,9 +33,9 @@
     size_gb:    "{{ disk.device[item].size }}"
     type:       "{{ disk.device[item].type }}"
     zone:       "{{ disk.zone }}"
-    project:    "{{ gcp_project.id }}"
+    project:    "{{ gcp_project_id }}"
     auth_kind:  "serviceaccount"
-    service_account_file: "{{ gcp_project.service_account_file }}"
+    service_account_file: "{{ gcp_service_account_file }}"
     scopes:
       - "{{ gcp_api_scopes.COMPUTE }}"
     state: "{{ disk.device[item].state }}"

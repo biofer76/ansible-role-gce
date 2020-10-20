@@ -3,10 +3,8 @@
 gcp_debug: yes
 
 ### Project config
-gcp_project: 
-  id: "{{ lookup('env','GCP_PROJECT_ID') }}"
-  service_account_file: "{{ lookup('env','GCP_SERVICE_ACCOUNT_FILE') }}"
-
+gcp_project_id: "{{ lookup('env','GCP_PROJECT_ID') }}"
+gcp_service_account_file: "{{ lookup('env','GCP_SERVICE_ACCOUNT_FILE') }}"
 
 ### Instance main properties
 gce_instance_name: ansible-gce-instance
