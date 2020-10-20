@@ -1,7 +1,12 @@
 ---
-- name: Debug
+- name: debug gce_instance
   debug:
     var: gce_instance
+  when: gcp_debug
+
+- name: debug project_id
+  debug:
+    var: gcp_project_id
   when: gcp_debug
 
 - name: include disk tasks
