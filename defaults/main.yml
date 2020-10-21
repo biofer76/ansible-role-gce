@@ -43,11 +43,18 @@ gce_disk:
       # image is supported on boot disk only
       image: projects/debian-cloud/global/images/debian-10-buster-v20200910
       state: present
-    ### Additional disks
+      # Labels
+      labels:
+        team: devops
+        application: awx
+    ## Additional disks
     # d1:
     #   size: 50
     #   type: pd-standard
     #   state: present
+    #   labels:
+    #     team: devops
+    #     application: awx
 
 ### VPC Network
 gce_network:

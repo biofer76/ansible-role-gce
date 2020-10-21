@@ -1,4 +1,8 @@
 ---
+- name: debug instance
+  debug:
+    var: gce_instance
+
 # GCE INSTANCE
 - name: add gce instance
   gcp_compute_instance:   

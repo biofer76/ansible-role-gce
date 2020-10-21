@@ -19,6 +19,7 @@
     scopes:
       - "{{ gcp_api_scopes.COMPUTE }}"
     state: "{{ gce_disk.device.d0.state }}"
+    labels: "{{ gce_disk.device.d0.labels }}"
   register: gce_disk_d0
   when: gce_disk.device.d0.state == "present"
 
@@ -53,6 +54,7 @@
     scopes:
       - "{{ gcp_api_scopes.COMPUTE }}"
     state: "{{ gce_disk.device[item].state }}"
+    labels: "{{ gce_disk.device.d0.labels }}"
   register: gce_additional_disk
   with_items: "{{ gce_disk.device }}"
   when: gce_disk.device|length > 1
