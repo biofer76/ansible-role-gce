@@ -1,11 +1,11 @@
 ---
 # GCE INSTANCE
-- name: manage gce instance
+- name: add gce instance
   gcp_compute_instance:   
-    name:         "{{ gce_instance_name }}"
-    machine_type: "{{ gce_instance_type }}"
-    zone:         "{{ gce_instance_zone }}"
-    state:        "{{ gce_instance_state }}"
+    name:         "{{ gce_instance.name }}"
+    machine_type: "{{ gce_instance.type }}"
+    zone:         "{{ gce_instance.zone }}"
+    state:        "{{ gce_instance.state }}"
     disks:
       - source: "{{ gce_disk_d0 }}"
         boot: true
@@ -13,26 +13,43 @@
     network_interfaces:
       - network: "{{ gce_network_result }}"
         access_configs:
-           - name: 'External NAT'
-             type: 'ONE_TO_ONE_NAT'
+           - name: External NAT
+             type: ONE_TO_ONE_NAT
              nat_ip: "{{ gce_ip_result }}"
     scheduling:
       on_host_maintenance: "MIGRATE"
       automatic_restart: yes
     service_accounts:
-      - email: "{{ gce_instance_service_account }}"
-        scopes: "{{ gce_instance_api_auth }}"
+      - email:  "{{ gce_instance.service_account }}"
+        scopes: "{{ gce_instance.api_auth }}"
     
-    deletion_protection: "{{ gce_instance_delete_protection }}"
-    labels: "{{ gce_instance_labels }}"
-    project: "{{ gcp_project_id }}"
+    deletion_protection: "{{ gce_instance.delete_protection }}"
+    labels:    "{{ gce_instance.labels }}"
+    project:   "{{ gcp_project_id }}"
     auth_kind: "serviceaccount"
     service_account_file: "{{ gcp_service_account_file }}"
     scopes:
       - "{{ gcp_api_scopes.COMPUTE }}"
-  register: gce_instance_result
+  register: gce_instance_create_result
+  when: gce_instance.state == "present"
+
+- name: debug instance create result
+  debug:
+    var: gce_instance_create_result
+  when: gcp_debug and gce_instance.state == "present"
+
+- name: remove gce instance
+  gcp_compute_instance:   
+    name:         "{{ gce_instance.name }}"
+    zone:         "{{ gce_instance.zone }}"
+    state:        "{{ gce_instance.state }}"
+    project:      "{{ gcp_project_id }}"
+    auth_kind:    "serviceaccount"
+    service_account_file: "{{ gcp_service_account_file }}"    
+  register: gce_instance_remove_result
+  when: gce_instance.state == "absent"
 
 - name: debug instance result
   debug:
-    var: gce_instance_result
-  when: gcp_debug 
+    var: gce_instance_remove_result
+  when: gcp_debug and gce_instance.state == "absent"

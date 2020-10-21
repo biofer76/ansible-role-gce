@@ -6,42 +6,48 @@ gcp_debug: yes
 gcp_project_id: "{{ lookup('env','GCP_PROJECT_ID') }}"
 gcp_service_account_file: "{{ lookup('env','GCP_SERVICE_ACCOUNT_FILE') }}"
 
-### Instance configuration
-gce_instance_name: ansible-gce-instance
-gce_instance_region: us-central1
-gce_instance_zone: us-central1-a
-gce_instance_state: present
-gce_instance_type: n1-standard-1
+### Common resources properties
+gce_resource_name: ansible-gce-instance
+gce_resource_region: us-central1
+gce_resource_zone: us-central1-a
 
-gce_instance_delete_protection: no
-### Instance service account
-gce_instance_service_account: "347021062934-compute@developer.gserviceaccount.com"
-### Instance API authorization
-gce_instance_api_auth:
-  - "{{ gcp_api_scopes.STORAGE_READ_WRITE }}"
-### Instance Labels (Ansible +2.9)
-gce_instance_labels:
-  team: devops
-  application: awx
+### Instance configuration
+gce_instance:
+  name: "{{ gce_resource_name }}"
+  zone: "{{ gce_resource_zone }}"
+  state: present
+  ### Instance Delete Type
+  type: n1-standard-1
+  ### Instance Delete Protection
+  delete_protection: no
+  ### Instance service account
+  service_account: "000000000000-compute@developer.gserviceaccount.com"
+  ### Instance API authorization
+  api_auth:
+    - "{{ gcp_api_scopes.STORAGE_READ_WRITE }}"
+  ### Instance Labels (Ansible +2.9)
+  labels:
+    team: devops
+    application: awx
 
 ### GCE Disks
 gce_disk:
-    name: "{{ gce_instance_name }}"
-    zone: "{{ gce_instance_zone }}"
-    device:
-      ### Boot disk
-      d0:     
-        size: 50
-        type: pd-standard
-        # Get all images uri: gcloud compute images list --uri
-        # image is supported on boot disk only
-        image: projects/debian-cloud/global/images/debian-10-buster-v20200910
-        state: present
-      ### Additional disks
-      # d1:
-      #   size: 50
-      #   type: pd-standard
-      #   state: present
+  name: "{{ gce_resource_name }}"
+  zone: "{{ gce_resource_zone }}"
+  device:
+    ### Boot disk
+    d0:
+      size: 50
+      type: pd-standard
+      # Get all images uri: gcloud compute images list --uri
+      # image is supported on boot disk only
+      image: projects/debian-cloud/global/images/debian-10-buster-v20200910
+      state: present
+    ### Additional disks
+    # d1:
+    #   size: 50
+    #   type: pd-standard
+    #   state: present
 
 ### VPC Network
 gce_network:
@@ -52,14 +58,9 @@ gce_network:
 
 ### Ext-IP Address
 gce_ip:
-  name: "{{ gce_instance_name }}"
+  name: "{{ gce_resource_name }}"
   state: present
-  region: "{{ gce_instance_region }}"
-
-### Configure resources (do not edit)
-disk: "{{ gce_instance.disk }}"
-network: "{{ gce_instance.network }}"
-ip: "{{ gce_instance.ip }}"
+  region: "{{ gce_resource_region }}"
 
 ### Google API Scopes
 gcp_api_scopes:

@@ -3,4 +3,4 @@
 - { name: include disk tasks, include: disk.yml, tags: disk, when: gce_disk.device is defined }
 - { name: include network tasks, include: network.yml, tags: network,  when: gce_network.n0 is defined }
 - { name: include ip address tasks, include: ip_address.yml, tags: ip_address, when: gce_ip.name is defined }
-- { name: include instance tasks, include: instance.yml, tags: instance, when: gce_instance_name != "" }
+- { name: include instance tasks, include: instance.yml, tags: instance, when: gce_instance.name is defined }
