@@ -1,12 +1,15 @@
 Google Compute Engine (GCE)
 =========
 
-An Ansible role ables to manage all GCE resources and simplify the integration process in other Ansible projects that require Google Cloud support.
+An Ansible role ables to manage GCE resources and simplify the integration process in other Ansible projects that require Google Cloud support.
 
 Requirements
 ------------
 
-* Python Google
+* python3
+* ansible >= 2.9
+* requests >= 2.18.4
+* google-auth >= 1.3.0
 
 Role Variables
 --------------
