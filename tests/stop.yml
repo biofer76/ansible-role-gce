@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars:
+    gce_instance:
+      name: "{{ lookup('env', 'GCE_INSTANCE') }}"
+      state: stopped
+      zone: "us-central1-a"
+    gce_disk:
+    gce_network:
+    gce_ip:
+  roles:
+    - gce
