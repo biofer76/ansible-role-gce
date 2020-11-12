@@ -2,6 +2,7 @@
 - name: debug instance
   debug:
     var: gce_instance
+  when: gcp_debug
 
 # GCE INSTANCE
 - name: switch gce instance to {{ gce_instance.state }} state
