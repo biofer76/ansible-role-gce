@@ -13,6 +13,7 @@
     project:   "{{ gcp_project_id }}"
     auth_kind: "serviceaccount"
     service_account_file: "{{ gcp_service_account_file }}"
+    labels: "{{ gce_instance.labels }}"
   when: gce_instance.state == "started" or gce_instance.state == "stopped"
 
 - name: add gce instance
