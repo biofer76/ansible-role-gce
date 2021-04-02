@@ -14,14 +14,16 @@ Requirements
 Role Variables
 --------------
 
-You can manage (create / remove) GCE resources by role variables.
+You can manage (create / update / remove) GCE resources through role variables instead of writing tasks.
+
+Defaults variables are include in `defaults/main.yml`, you can create your custom version in the Ansible project that includes this role.
 
 Display GCP debug info
 ```
 gcp_debug: yes
 ```
 
-GCP Project configuration, default values are included as environment variables:
+GCP Project configuration is included as environment variables:
 
 * `GCP_PROJECT_ID`
   The ID of your Google Project
@@ -131,14 +133,46 @@ gcp_api_scopes:
   STORAGE_READ_WRITE: https://www.googleapis.com/auth/devstorage.read_write
 ```
 
-Example Playbook
+Run in a Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Create a new Playbook and include the role and your custom configuration file (check `defaults/main.yml`):
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+## Basic Project Tree
+
+```
+ansilbe-project
+├── create.yml
+├── roles
+│   └── gce
+│       ├── defaults
+│       │   └── main.yml
+│       ├── handlers
+│       ├── meta
+│       ├── README.md
+│       ├── tasks
+│       ├── tests
+│       └── vars
+└── vars
+    └── gce-config.yml
+```
+
+In the example below an example of `create.yml` Playbook:
+
+```yaml
+# Build new disk image (template) for AI machines provisioning
+- name: Create a new GCE instance
+  hosts: localhost
+  gather_facts: no
+  vars_files:
+    - vars/gce-config.yml
+
+  roles:
+    - role: ansible-role-gce
+```
+
+It will create a new instance as defined in `vars/gce-config.yml`
+
 
 License
 -------
