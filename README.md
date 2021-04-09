@@ -50,24 +50,20 @@ The definition below configure a new GCP instance with all required properties.
 You must specify an available service account to assign to the instance, usually there is a default service account for GCP instances.  
 Please check [IAM accounts in Google Cloud Console](https://console.cloud.google.com/iam-admin/serviceaccounts), default service account has a pattern like `000000000000-compute@developer.gserviceaccount.com`.
 
-You should also define **Google API permissions** for the new instance, a partial list of available access scopes is displayed at the of this section.
+You have also to define **Google API permissions** for the new instance, a partial list of available access scopes is included at the of this section. 
+### Create a new GCE instance
 
-Example access scopes include:
-* https://www.googleapis.com/auth/compute. Full control access to Compute Engine methods.
-* https://www.googleapis.com/auth/compute.readonly. Read-only access to Compute Engine methods.
-* https://www.googleapis.com/auth/devstorage.read_only. Read-only access to Cloud Storage.
-* https://www.googleapis.com/auth/logging.write. Write access to the Compute Engine logs.
+Required resource properties to create a new instance:
 
-All GCE instance properties are mandatory, labels as well
-
+**Machine Configuration**
 ```
 gce_instance:
-  name: "my-ansible-instance"
-  zone: "europe-west1-b"
+  name: my-ansible-instance
+  zone: europe-west1-b
   state: present
   type: n1-standard-1
   delete_protection: no
-  service_account: "000000000000-compute@developer.gserviceaccount.com"
+  service_account: 000000000000-compute@developer.gserviceaccount.com
   api_auth:
     - "{{ gcp_api_scopes.STORAGE_READ_WRITE }}"
   labels:
@@ -78,7 +74,6 @@ gce_instance:
 ```
 
 **Disks Configuration**
-You can chose 
 ```
 gce_disk:
   name: "my-ansible-disk"
@@ -136,13 +131,16 @@ gcp_api_scopes:
 Run in a Playbook
 ----------------
 
-Create a new Playbook and include the role and your custom configuration file (check `defaults/main.yml`):
+Create a new Playbook and include the role and your custom configuration file (all required variables are in  `defaults/main.yml` file):
 
-## Basic Project Tree
+## Create an Ansible project
+
+Folders and files structure:
 
 ```
-ansilbe-project
+ansible-project
 ├── create.yml
+├── terminate.yml
 ├── roles
 │   └── gce
 │       ├── defaults
@@ -157,10 +155,11 @@ ansilbe-project
     └── gce-config.yml
 ```
 
-In the example below an example of `create.yml` Playbook:
+**Create a new running instance**
+
+In the example below an example **how to create** a new instance (`create.yml`) as defined in `vars/gce-config.yml` file.
 
 ```yaml
-# Build new disk image (template) for AI machines provisioning
 - name: Create a new GCE instance
   hosts: localhost
   gather_facts: no
@@ -171,8 +170,19 @@ In the example below an example of `create.yml` Playbook:
     - role: ansible-role-gce
 ```
 
-It will create a new instance as defined in `vars/gce-config.yml`
+**Terminate (stop) the GCP instance**
 
+Define `gce_instance` dictionary and leave undefined other ones, execute the role and instance `my-ansible-instance` will be stopped
+
+```yaml
+gce_instance:
+  name: my-ansible-instance
+  state: stopped
+  zone: us-central1-a
+gce_disk:
+gce_network:
+gce_ip:
+```
 
 License
 -------
