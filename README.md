@@ -128,12 +128,10 @@ gcp_api_scopes:
   STORAGE_READ_WRITE: https://www.googleapis.com/auth/devstorage.read_write
 ```
 
-Run in a Playbook
-----------------
+Include in an Ansible project
+-----------------------------
 
 Create a new Playbook and include the role and your custom configuration file (all required variables are in  `defaults/main.yml` file):
-
-## Create an Ansible project
 
 Folders and files structure:
 
