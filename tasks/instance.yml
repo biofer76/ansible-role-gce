@@ -15,6 +15,7 @@
     auth_kind: "serviceaccount"
     service_account_file: "{{ gcp_service_account_file }}"
     labels: "{{ gce_instance.labels }}"
+  register: gce_instance_info
   when: gce_instance.state == "started" or gce_instance.state == "stopped"
 
 - name: add gce instance
