@@ -18,6 +18,11 @@
   register: gce_instance_info
   when: gce_instance.state == "started" or gce_instance.state == "stopped"
 
+- name: debug instance info
+  debug:
+    var: gce_instance_info
+  when: gce_instance_info is defined
+
 - name: add gce instance
   gcp_compute_instance:   
     name:         "{{ gce_instance.name }}"
