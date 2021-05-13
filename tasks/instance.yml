@@ -32,7 +32,7 @@
     disks:
       - source: "{{ gce_disk_d0 }}"
         boot: true
-        auto_delete: true
+        auto_delete: "{{ gce_disk.device.d0.auto_delete | default(true) }} "
     network_interfaces:
       - network: "{{ gce_network_result }}"
         access_configs:
