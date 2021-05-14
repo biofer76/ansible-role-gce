@@ -23,6 +23,14 @@
     var: gce_instance_info
   when: gce_instance_info is defined
 
+- name: set network interface
+  set_fact:
+    network_interface_access_config: 
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+        nat_ip: "{{ gce_ip_result }}"
+  when: gce_ip_result is defined
+
 - name: add gce instance
   gcp_compute_instance:   
     name:         "{{ gce_instance.name }}"
@@ -32,13 +40,10 @@
     disks:
       - source: "{{ gce_disk_d0 }}"
         boot: true
-        auto_delete: "{{ gce_disk.device.d0.auto_delete | default(true) }} "
+        auto_delete: true
     network_interfaces:
       - network: "{{ gce_network_result }}"
-        access_configs:
-           - name: External NAT
-             type: ONE_TO_ONE_NAT
-             nat_ip: "{{ gce_ip_result }}"
+        access_configs: "{{ network_interface_access_config | default() }}"
     scheduling:
       on_host_maintenance: "MIGRATE"
       automatic_restart: yes
