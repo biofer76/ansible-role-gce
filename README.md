@@ -56,7 +56,7 @@ You have also to define **Google API permissions** for the new instance, a parti
 Required resource properties to create a new instance:
 
 **Machine Configuration**
-```
+```yaml
 gce_instance:
   name: my-ansible-instance
   zone: europe-west1-b
@@ -74,7 +74,7 @@ gce_instance:
 ```
 
 **Disks Configuration**
-```
+```yaml
 gce_disk:
   name: "my-ansible-disk"
   zone: "europe-west1-b"
@@ -99,7 +99,7 @@ gce_disk:
 ```
 
 **VPC Network**
-```
+```yaml
 gce_network:
   n0:
     name: default
@@ -107,12 +107,17 @@ gce_network:
     state: present
 ```
 
-**External IP Address**
-```
+**External IP Address (public)**
+```yaml
 gce_ip:
   name: "{{ gce_resource_name }}"
   state: present
   region: "{{ gce_resource_region }}"
+```
+
+**Internal IP Address only (private)**
+```yaml
+gce_ip:
 ```
 
 **Google API Scopes**
