@@ -4,7 +4,9 @@
     var: gce_instance
   when: gcp_debug
 
-# GCE INSTANCE
+# ------------------------------ #
+# --- # VM Instance State # ---  #
+# ------------------------------ #
 - name: switch gce instance to {{ gce_instance.state }} state
   gcp_compute_instance:  
     name:      "{{ gce_instance.name }}"
@@ -21,16 +23,32 @@
 - name: debug instance info
   debug:
     var: gce_instance_info
-  when: gce_instance_info is defined
+  when: gce_instance_info is defined and gcp_debug
 
-- name: set network interface
+# --------------------------- #
+# --- # Network Config # ---  #
+# --------------------------- #
+- name: set network interface empty
   set_fact:
     network_interface_access_config: 
-      - name: External NAT
-        type: ONE_TO_ONE_NAT
-        nat_ip: "{{ gce_ip_result }}"
-  when: gce_ip_result is defined
+  when: gce_ip.name is not defined
 
+- name: set network interface data 
+  set_fact:
+    network_interface_access_config: 
+          - name: External NAT
+            type: ONE_TO_ONE_NAT
+            nat_ip: "{{ gce_ip_result }}"
+  when: gce_ip.name is defined
+
+- name: debug network interface access config
+  debug:
+    var: network_interface_access_config
+  when: gcp_debug
+
+# ------------------------------- #
+# --- # VM Instance Config # ---  #
+# ------------------------------- #
 - name: add gce instance
   gcp_compute_instance:   
     name:         "{{ gce_instance.name }}"
@@ -43,14 +61,13 @@
         auto_delete: true
     network_interfaces:
       - network: "{{ gce_network_result }}"
-        access_configs: "{{ network_interface_access_config | default() }}"
+        access_configs: "{{ network_interface_access_config }}"
     scheduling:
       on_host_maintenance: "MIGRATE"
       automatic_restart: yes
     service_accounts:
       - email:  "{{ gce_instance.service_account }}"
         scopes: "{{ gce_instance.api_auth }}"
-    
     deletion_protection: "{{ gce_instance.delete_protection }}"
     labels:    "{{ gce_instance.labels }}"
     project:   "{{ gcp_project_id }}"
@@ -66,6 +83,9 @@
     var: gce_instance_create_result
   when: gcp_debug and gce_instance.state == "present"
 
+# ------------------------------- #
+# --- # VM Instance Remove # ---  #
+# ------------------------------- #
 - name: remove gce instance
   gcp_compute_instance:   
     name:         "{{ gce_instance.name }}"
