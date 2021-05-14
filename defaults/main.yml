@@ -43,6 +43,7 @@ gce_disk:
       # image is supported on boot disk only
       image: projects/debian-cloud/global/images/debian-10-buster-v20200910
       state: present
+      auto_delete: true
       # Labels
       labels:
         team: devops
