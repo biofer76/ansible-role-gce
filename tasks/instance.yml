@@ -51,22 +51,24 @@
     zone:         "{{ gce_instance.zone }}"
     state:        "{{ gce_instance.state }}"
     disks:
-      - source: "{{ gce_disk_d0 }}"
+      - source:   "{{ gce_disk_d0 }}"
         boot: true
         auto_delete: "{{ gce_disk.device.d0.auto_delete | default(true) }} "
     network_interfaces:
-      - network: "{{ gce_network_result }}"
+      - network:  "{{ gce_network_result }}"
         access_configs: "{{ network_interface_access_config }}"
     scheduling:
       on_host_maintenance: "MIGRATE"
       automatic_restart: yes
     service_accounts:
-      - email:  "{{ gce_instance.service_account }}"
-        scopes: "{{ gce_instance.api_auth }}"
+      - email:    "{{ gce_instance.service_account }}"
+        scopes:   "{{ gce_instance.api_auth }}"
     deletion_protection: "{{ gce_instance.delete_protection }}"
-    labels:    "{{ gce_instance.labels }}"
-    project:   "{{ gcp_project_id }}"
-    auth_kind: "serviceaccount"
+    labels:       "{{ gce_instance.labels }}"
+    tags:
+      items:     "{{ gce_instance.tags }}"
+    project:     "{{ gcp_project_id }}"
+    auth_kind:   "serviceaccount"
     service_account_file: "{{ gcp_service_account_file }}"
     scopes:
       - "{{ gcp_api_scopes.COMPUTE }}"

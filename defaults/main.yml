@@ -28,7 +28,10 @@ gce_instance:
   ### Instance Labels (Ansible +2.9)
   labels:
     team: devops
-    application: awx
+    application: ansible
+  ## A list of tags used to identify targets for network firewalls
+  tags:
+    - http-server
 
 ### GCE Disks
 gce_disk:
@@ -47,7 +50,7 @@ gce_disk:
       # Labels
       labels:
         team: devops
-        application: awx
+        application: ansible
     ## Additional disks
     # d1:
     #   size: 50
