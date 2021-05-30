@@ -10,6 +10,7 @@ gcp_service_account_file: "{{ lookup('env','GCP_SERVICE_ACCOUNT_FILE') }}"
 gce_resource_name: ansible-gce-instance
 gce_resource_region: us-central1
 gce_resource_zone: us-central1-a
+gce_instance_service_account: 000000000000-compute@developer.gserviceaccount.com
 
 ### Instance configuration
 gce_instance:
@@ -25,7 +26,7 @@ gce_instance:
   ### Instance Delete Protection
   delete_protection: no
   ### Instance service account
-  service_account: "000000000000-compute@developer.gserviceaccount.com"
+  service_account: "{{ gce_instance_service_account }}"
   ### Instance API authorization
   api_auth:
     - "{{ gcp_api_scopes.STORAGE_READ_WRITE }}"
