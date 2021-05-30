@@ -92,4 +92,4 @@ gcp_api_scopes:
 
 ### Google GPU Accelerators
 gcp_gpu_types:
-  P100: "projects/{{ gcp_project_id }}/zones/{{ gce_resource_region }}/acceleratorTypes/nvidia-tesla-p100"
+  P100: "projects/{{ gcp_project_id }}/zones/{{ gce_resource_zone }}/acceleratorTypes/nvidia-tesla-p100"
