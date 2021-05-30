@@ -57,6 +57,7 @@
     network_interfaces:
       - network:  "{{ gce_network_result }}"
         access_configs: "{{ network_interface_access_config }}"
+    guest_accelerators: "{{ gce_instance.gpu }}"
     scheduling:
       on_host_maintenance: "MIGRATE"
       automatic_restart: yes

@@ -18,6 +18,10 @@ gce_instance:
   state: present
   ### Instance Delete Type
   type: n1-standard-1
+  ## GPU Accelerator
+  # gpu:
+  #   - accelerator_count: "1"
+  #     accelerator_type: "{{ gcp_gpu_types.P100 }}"
   ### Instance Delete Protection
   delete_protection: no
   ### Instance service account
@@ -83,3 +87,7 @@ gcp_api_scopes:
   SERVICE_MANAGEMENT_READONLY: https://www.googleapis.com/auth/service.management.readonly
   TRACE_APPEND: https://www.googleapis.com/auth/trace.append
   STORAGE_READ_WRITE: https://www.googleapis.com/auth/devstorage.read_write
+
+### Google GPU Accelerators
+gcp_gpu_types:
+  P100: "projects/{{ gcp_project_id }}/zones/{{ gce_resource_region }}/acceleratorTypes/nvidia-tesla-p100"
