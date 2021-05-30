@@ -24,6 +24,8 @@ gce_instance:
   # gpu:
   #   - accelerator_count: "1"
   #     accelerator_type: "{{ gcp_gpu_types.P100 }}"
+  ### Terminate on host maintenance if true, otherwise instance will be migrated
+  terminate_on_maintenance: no
   ### Instance Delete Protection
   delete_protection: no
   ### Instance service account

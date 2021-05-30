@@ -59,7 +59,7 @@
         access_configs: "{{ network_interface_access_config }}"
     guest_accelerators: "{{ gce_instance.gpu }}"
     scheduling:
-      on_host_maintenance: "MIGRATE"
+      on_host_maintenance: "{% if gce_instance.terminate_on_maintenance %}TERMINATE{% else %}MIGRATE{% endif %}"
       automatic_restart: yes
     service_accounts:
       - email:    "{{ gce_instance.service_account }}"
