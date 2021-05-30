@@ -19,7 +19,8 @@ gce_instance:
   state: present
   ### Instance Delete Type
   type: n1-standard-1
-  ## GPU Accelerator
+  ## GPU Accelerator (default: no)
+  gpu: []
   # gpu:
   #   - accelerator_count: "1"
   #     accelerator_type: "{{ gcp_gpu_types.P100 }}"
