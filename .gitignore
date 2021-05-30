@@ -1,3 +1,4 @@
 *.json
 ansible.cfg
 *debug*
+.env

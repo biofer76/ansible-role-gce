@@ -10,6 +10,7 @@ gcp_service_account_file: "{{ lookup('env','GCP_SERVICE_ACCOUNT_FILE') }}"
 gce_resource_name: ansible-gce-instance
 gce_resource_region: us-central1
 gce_resource_zone: us-central1-a
+gce_instance_service_account: 000000000000-compute@developer.gserviceaccount.com
 
 ### Instance configuration
 gce_instance:
@@ -18,10 +19,17 @@ gce_instance:
   state: present
   ### Instance Delete Type
   type: n1-standard-1
+  ## GPU Accelerator (default: no)
+  gpu: []
+  # gpu:
+  #   - accelerator_count: "1"
+  #     accelerator_type: "{{ gcp_gpu_types.P100 }}"
+  ### Terminate on host maintenance if true, otherwise instance will be migrated
+  terminate_on_maintenance: no
   ### Instance Delete Protection
   delete_protection: no
   ### Instance service account
-  service_account: "000000000000-compute@developer.gserviceaccount.com"
+  service_account: "{{ gce_instance_service_account }}"
   ### Instance API authorization
   api_auth:
     - "{{ gcp_api_scopes.STORAGE_READ_WRITE }}"
@@ -83,3 +91,9 @@ gcp_api_scopes:
   SERVICE_MANAGEMENT_READONLY: https://www.googleapis.com/auth/service.management.readonly
   TRACE_APPEND: https://www.googleapis.com/auth/trace.append
   STORAGE_READ_WRITE: https://www.googleapis.com/auth/devstorage.read_write
+
+### Google GPU Accelerators
+gcp_gpu_types:
+  P100: "projects/{{ gcp_project_id }}/zones/{{ gce_resource_zone }}/acceleratorTypes/nvidia-tesla-p100"
+  K80: "projects/{{ gcp_project_id }}/zones/{{ gce_resource_zone }}/acceleratorTypes/nvidia-tesla-k80"
+  
