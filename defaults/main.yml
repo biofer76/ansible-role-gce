@@ -11,12 +11,13 @@ gce_resource_name: ansible-gce-instance
 gce_resource_region: us-central1
 gce_resource_zone: us-central1-a
 gce_instance_service_account: 000000000000-compute@developer.gserviceaccount.com
+gce_instance_state: present
 
 ### Instance configuration
 gce_instance:
   name: "{{ gce_resource_name }}"
   zone: "{{ gce_resource_zone }}"
-  state: present
+  state: "{{ gce_instance_state }}"
   ### Instance Delete Type
   type: n1-standard-1
   ## GPU Accelerator (default: no)
