@@ -2,7 +2,7 @@
 - name: set public ip address
   set_fact:
     gce_instance_public_ip: "{{ network_interface_access_config[0].nat_ip.address }}"
-  when: network_interface_access_config.name is defined
+  when: network_interface_access_config[0].name is defined
 
 - name: set private ip address
   set_fact:
