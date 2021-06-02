@@ -55,8 +55,9 @@
         boot: true
         auto_delete: "{{ gce_disk.device.d0.auto_delete | default(true) }} "
     network_interfaces:
-      - network:  "{{ gce_network_result }}"
+      - network:  "{{ gce_network_result.resources[0] }}"
         access_configs: "{{ network_interface_access_config }}"
+        subnetwork: "{{ gce_subnetwork_result.resources[0] }}"
     guest_accelerators: "{{ gce_instance.gpu }}"
     scheduling:
       on_host_maintenance: "{% if gce_instance.terminate_on_maintenance %}TERMINATE{% else %}MIGRATE{% endif %}"

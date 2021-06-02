@@ -71,10 +71,8 @@ gce_disk:
 
 ### VPC Network
 gce_network:
-  n0:
-    name: default
-    create_subnet: no
-    state: present
+  - name: default
+    subnetwork: default
 
 ### Ext-IP Address
 gce_ip:

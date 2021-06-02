@@ -1,5 +1,7 @@
 ---
-# IP ADDRESS
+# ----------------------- #
+# --- # IP Address # ---  #
+# ----------------------- #
 - name: debug ip config
   debug:
     var: gce_ip

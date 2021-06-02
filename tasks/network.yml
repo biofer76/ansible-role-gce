@@ -1,31 +1,35 @@
 --- 
-# GCE NETWORK
-- name: debug network config
-  debug:
-    var: gce_network
-  when: gcp_debug 
-
-- name: manage gce network (present)
-  gcp_compute_network:
-    name: "{{ gce_network.n0.name }}"
-    auto_create_subnetworks: "{{ gce_network.n0.create_subnet }}"
+# ------------------------ #
+# --- # VPC Network # ---  #
+# ------------------------ #
+- name: get info on the configured network
+  gcp_compute_network_info:
+    filters:
+      - name = "{{ gce_network[0].name }}"
     project: "{{ gcp_project_id }}"
     auth_kind: "serviceaccount"
     service_account_file: "{{ gcp_service_account_file }}"
-    scopes:
-      -  "{{ gcp_api_scopes.COMPUTE }}"
-    state: "{{ gce_network.n0.state }}"
   register: gce_network_result
-  when: gce_network.n0.state == "present"
 
-- name: manage gce network (absent)
-  gcp_compute_network:
-    name: "{{ gce_network.n0.name }}"
+- name: debug network
+  debug:
+    var: gce_network_result
+  when: gcp_debug
+
+# ----------------------- #
+# --- # Subnetwork # ---  #
+# ----------------------- #
+- name: get info on the selected subnetwork
+  gcp_compute_subnetwork_info:
+    region: "{{ gce_resource_region }}"
+    filters:
+      - name = "{{ gce_network[0].subnetwork }}"
     project: "{{ gcp_project_id }}"
     auth_kind: "serviceaccount"
     service_account_file: "{{ gcp_service_account_file }}"
-    scopes:
-      -  "{{ gcp_api_scopes.COMPUTE }}"
-    state: "{{ gce_network.n0.state }}"
-  register: gce_network
-  when: gce_network.n0.state == "absent"
+  register: gce_subnetwork_result
+
+- name: debug subnetwork
+  debug:
+    var: gce_subnetwork_result
+  when: gcp_debug
