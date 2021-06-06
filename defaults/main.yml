@@ -1,6 +1,6 @@
 ---
 ### Display GCP debug info
-gcp_debug: yes
+gcp_debug: true
 
 ### Project configuration
 gcp_project_id: "{{ lookup('env','GCP_PROJECT_ID') }}"
@@ -13,6 +13,13 @@ gce_resource_zone: us-central1-a
 gce_instance_service_account: 000000000000-compute@developer.gserviceaccount.com
 gce_instance_state: present
 
+### Cloud DNS
+gcp_dns_name_enabled: false
+gcp_dns_domain: zone.com
+gcp_dns_name: global-zone-com
+gcp_dns_ttl: 600
+gcp_dns_private_ip: true
+
 ### Instance configuration
 gce_instance:
   name: "{{ gce_resource_name }}"
@@ -20,15 +27,15 @@ gce_instance:
   state: "{{ gce_instance_state }}"
   ### Instance Delete Type
   type: n1-standard-1
-  ## GPU Accelerator (default: no)
+  ## GPU Accelerator (default: false)
   gpu: []
   # gpu:
   #   - accelerator_count: "1"
   #     accelerator_type: "{{ gcp_gpu_types.P100 }}"
   ### Terminate on host maintenance if true, otherwise instance will be migrated
-  terminate_on_maintenance: no
+  terminate_on_maintenance: false
   ### Instance Delete Protection
-  delete_protection: no
+  delete_protection: false
   ### Instance service account
   service_account: "{{ gce_instance_service_account }}"
   ### Instance API authorization

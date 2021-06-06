@@ -23,7 +23,7 @@
 # --------------------------- #
 # --- # Network Config # ---  #
 # --------------------------- #
-- name: set network interface empty
+- name: set network interface (empty)
   set_fact:
     network_interface_access_config: 
   when: gce_ip.name is not defined
@@ -42,9 +42,9 @@
   when: gcp_debug
 
 # ------------------------------- #
-# --- # VM Instance Config # ---  #
+# --- # Create VM Instance # ---  #
 # ------------------------------- #
-- name: add gce instance
+- name: create gce instance
   gcp_compute_instance:   
     name:         "{{ gce_instance.name }}"
     machine_type: "{{ gce_instance.type }}"
@@ -78,7 +78,7 @@
   when: gce_instance.state == "present"
 
 # ------------------------------- #
-# --- # VM Instance Remove # ---  #
+# --- # Remove VM Instance # ---  #
 # ------------------------------- #
 - name: remove gce instance
   gcp_compute_instance:   
@@ -94,7 +94,7 @@
 # --------------------------------- #
 # --- # Get VM Instance info # ---  #
 # --------------------------------- #
-- name: switch gce instance to {{ gce_instance.state }} state
+- name: get instance info
   gcp_compute_instance_info:
     zone:      "{{ gce_instance.zone }}"
     filters:
@@ -113,5 +113,5 @@
 # --- # VM Instance IPs # ---  #
 # ---------------------------- #
 - name: include instance ip configuration 
-  include: "instance_ip.yml"
+  include: "instance_ips.yml"
   when: gce_instance.state == "present"

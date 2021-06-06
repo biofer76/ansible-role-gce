@@ -1,0 +1,23 @@
+---
+- name: create a managed zone
+  google.cloud.gcp_dns_managed_zone:
+    name: "{{ gcp_dns_name }}"
+    dns_name: "{{ gcp_dns_domain }}."
+    description: Created by Ansible GCE Role
+    project:   "{{ gcp_project_id }}"
+    auth_kind: "serviceaccount"
+    service_account_file: "{{ gcp_service_account_file }}"
+    state: present
+  register: gcp_dns_managed_zone
+
+- name: register a new record set in cloud dns
+  gcp_dns_resource_record_set:
+    name: "{{ gce_resource_name }}.{{ gcp_dns_domain}}."
+    managed_zone: "{{ gcp_dns_managed_zone }}"
+    type: A
+    ttl: "{{ gcp_dns_ttl }}"
+    target: "{% if gcp_dns_private_ip %}{{ gce_instance_private_ip }}{% else %}{{ gce_instance_public_ip }}{% endif %}"
+    project:   "{{ gcp_project_id }}"
+    auth_kind: "serviceaccount"
+    service_account_file: "{{ gcp_service_account_file }}"
+    state: present
