@@ -67,14 +67,6 @@ gce_disk:
       labels:
         team: devops
         application: ansible
-    ## Additional disks
-    # d1:
-    #   size: 50
-    #   type: pd-standard
-    #   state: present
-    #   labels:
-    #     team: devops
-    #     application: awx
 
 ### VPC Network
 gce_network:
