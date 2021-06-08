@@ -10,7 +10,7 @@
     auth_kind: "serviceaccount"
     service_account_file: "{{ gcp_service_account_file }}"
   register: gce_network_result
-  when: gce_network is defined
+  when: gce_network[0] is defined
 
 - name: debug network
   debug:
@@ -29,6 +29,7 @@
     auth_kind: "serviceaccount"
     service_account_file: "{{ gcp_service_account_file }}"
   register: gce_subnetwork_result
+  when: gce_network[0] is defined
 
 - name: debug subnetwork
   debug:
